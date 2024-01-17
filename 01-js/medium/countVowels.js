@@ -6,7 +6,15 @@
 */
 
 function countVowels(str) {
-    // Your code here
+  function countVowels(str) {
+    // Convert the string to lowercase to consider both uppercase and lowercase vowels
+    const lowercaseStr = str.toLowerCase();
+
+    // Count the number of vowels using a regular expression
+    const vowelCount = (lowercaseStr.match(/[aeiou]/g) || []).length;
+
+    return vowelCount;
+}
 }
 
 module.exports = countVowels;
