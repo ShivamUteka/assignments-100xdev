@@ -5,14 +5,24 @@ const express = require('express');
 const app = express();
 let errorCount = 0;
 
-// You have been given an express server which has a few endpoints.
-// Your task is to
-// 1. Ensure that if there is ever an exception, the end user sees a status code of 404
-// 2. Maintain the errorCount variable whose value should go up every time there is an exception in any endpoint
+// Middleware to handle errors globally
+app.use((err, req, res, next) => {
+  // Increment errorCount on each exception
+  errorCount++;
+  
+  // Send a 404 status code to the end user
+  res.status(404).json({ error: 'Not Found' });
+});
 
-app.get('/user', function(req, res) {
-  throw new Error("User not found");
-  res.status(200).json({ name: 'john' });
+app.get('/user', function(req, res, next) {
+  // Wrap the code in a try-catch block to catch exceptions
+  try {
+    throw new Error("User not found");
+    res.status(200).json({ name: 'john' });
+  } catch (error) {
+    // Pass the error to the global error handler middleware
+    next(error);
+  }
 });
 
 app.post('/user', function(req, res) {
